@@ -20,8 +20,14 @@ const articleSchema = new mongoose.Schema({
 
 const Article = mongoose.model("Article", articleSchema);
 
-app.get("/", (req, res) => {
-  res.send("Hello World!");
+app.get("/articles", (req, res) => {
+  Article.find({}, (err, results) => {
+    if (!err) {
+      res.send(results);
+    } else {
+      res.send(err);
+    }
+  });
 });
 
 app.listen(port, () => {
