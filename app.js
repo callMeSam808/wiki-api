@@ -20,29 +20,38 @@ const articleSchema = new mongoose.Schema({
 
 const Article = mongoose.model("Article", articleSchema);
 
-app.get("/articles", (req, res) => {
-  Article.find({}, (err, results) => {
-    if (!err) {
-      res.send(results);
-    } else {
-      res.send(err);
-    }
+app.route("/articles")
+  .get((req, res) => {
+    Article.find({}, (err, results) => {
+      if (!err) {
+        res.send(results);
+      } else {
+        res.send(err);
+      }
+    });
+  })
+  .post((req, res) => {
+    const newArticle = new Article({
+      title: req.body.title,
+      content: req.body.content
+    });
+    newArticle.save((err) => {
+      if (!err) {
+        res.send("Successfully added new article.");
+      } else {
+        res.send(err);
+      }
+    });
+  })
+  .delete((req, res) => {
+    Article.deleteMany({}, (err) => {
+      if (!err) {
+        res.send("Successfully deleted all articles.");
+      } else {
+        res.send(err);
+      }
+    });
   });
-});
-
-app.post("/articles", (req, res) => {
-  const newArticle = new Article({
-    title: req.body.title,
-    content: req.body.content
-  });
-  newArticle.save((err) => {
-    if (!err) {
-      res.send("Successfully added new article.");
-    } else {
-      res.send(err);
-    }
-  });
-});
 
 app.listen(port, () => {
   console.log(`Wiki API is listening on port ${port}`);
