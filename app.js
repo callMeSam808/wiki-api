@@ -20,6 +20,7 @@ const articleSchema = new mongoose.Schema({
 
 const Article = mongoose.model("Article", articleSchema);
 
+// Requests targeting all articles
 app.route("/articles")
   .get((req, res) => {
     Article.find({}, (err, results) => {
@@ -49,6 +50,18 @@ app.route("/articles")
         res.send("Successfully deleted all articles.");
       } else {
         res.send(err);
+      }
+    });
+  });
+
+// Requests targeting a specific target
+app.route("/articles/:articleTitle")
+  .get((req, res) => {
+    Article.findOne({title: req.params.articleTitle}, (err, result) => {
+      if (result) {
+        res.send(result);
+      } else {
+        res.send("Article not found.");
       }
     });
   });
