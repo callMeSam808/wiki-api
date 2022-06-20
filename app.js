@@ -64,7 +64,18 @@ app.route("/articles/:articleTitle")
         res.send("Article not found.");
       }
     });
-  });
+  })
+  .put((req, res) => {
+    Article.replaceOne(
+      {title: req.params.articleTitle}, 
+      {title: req.body.title, content: req.body.content},
+      (err) => {
+        if (!err) {
+          res.send("Successfully updated article.");
+        }
+      }
+    );
+  })
 
 app.listen(port, () => {
   console.log(`Wiki API is listening on port ${port}`);
