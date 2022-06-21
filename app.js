@@ -76,6 +76,19 @@ app.route("/articles/:articleTitle")
       }
     );
   })
+  .patch((req, res) => {
+    Article.updateOne(
+      {title: req.params.articleTitle},
+      {$set: req.body},
+      (err) => {
+        if (!err) {
+          res.send("Successfully updated article.");
+        } else {
+          res.send(err);
+        }
+      }
+    );
+  });
 
 app.listen(port, () => {
   console.log(`Wiki API is listening on port ${port}`);
